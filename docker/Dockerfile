@@ -11,8 +11,13 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY ./demo /app/
-RUN npm install
-EXPOSE 3000
+RUN chown -R node:node /app
+USER node
+#Base dependencies
+RUN npm install 
+#Install sharp
+RUN npm i sharp
+RUN npm rebuild --arch=x64 --platform=linux --libc=musl sharp
 RUN npm run build
-#CMD ["npm", "run", "build"]
+EXPOSE 3000
 CMD ["npm", "run", "start"]
